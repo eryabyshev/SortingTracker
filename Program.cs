@@ -101,6 +101,40 @@ namespace SortingTracker
 
         }
 
+        public static void Quick(T[] array, Mode cmp)
+        {
+            _Quick(array, 0, array.Length - 1, cmp);
+        }
+
+        private static void _Quick(T[] array, int start, int end, Mode cmp)
+        {
+            T splitter = array[(start + end) / 2];
+            int i = start, j = end;
+
+            while(i <= j){
+
+
+                while (cmp(splitter, array[i]))
+                    i++;
+                while(cmp(array[j], splitter))
+                    j--;
+                if(i > j)
+                    break;
+
+                T temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+                i++;
+                j--;
+            }
+
+            if(j > start)
+                _Quick(array, start, j, cmp);
+            if(i < end)
+                _Quick(array, i, end, cmp);
+        }
+
+
 
         public static bool Acs(T x, T y)
         {
@@ -114,14 +148,17 @@ namespace SortingTracker
     }
 
 
+    
+
+
     class Program
     {
         static void Main(string[] args)
         {
 
-            int[] array = { 1, 32, 4, 5 };
+            int[] array = { 1, 32, 4 };
 
-            Sort<int>.Merge(array, Sort<int>.Acs);
+            Sort<int>.Quick(array, Sort<int>.Dec);
             foreach (int i in array)
                 Console.Write(i + " ");
             Console.WriteLine();
