@@ -135,6 +135,55 @@ namespace SortingTracker
         }
 
 
+        public static void Heap (T[] array, Mode cmp)
+        {
+            for (Int32 i = array.Length / 2 - 1; i >= 0; --i)
+            {
+                long prev_i = i;
+                i = add2pyramid(array, i, array.Length, cmp);
+                if (prev_i != i) ++i;
+            }
+
+            T buf;
+            for (Int32 k = array.Length - 1; k > 0; --k)
+            {
+                buf = array[0];
+                array[0] = array[k];
+                array[k] = buf;
+                int i = 0, prev_i = -1;
+                while (i != prev_i)
+                {
+                    prev_i = i;
+                    i = add2pyramid(array, i, array.Length, cmp);
+                }
+            }
+        }
+
+        private static int add2pyramid(T[] array, int i, int N, Mode cmp)
+        {
+            int imax;
+            T buf;
+            if ((2 * i + 2) < N)
+            {
+                if (cmp(array[2 * i + 1], array[2 * i + 2])) 
+                    imax = 2 * i + 2;
+                else 
+                    imax = 2 * i + 1;
+            }
+            else imax = 2 * i + 1;
+            if (imax >= N) return i;
+            if (cmp(array[i], array[imax])) ;
+            {
+                buf = array[i];
+                array[i] = array[imax];
+                array[imax] = buf;
+                if (imax < N / 2) i = imax;
+            }
+            return i;
+        }
+
+
+
 
         public static bool Acs(T x, T y)
         {
@@ -158,7 +207,7 @@ namespace SortingTracker
 
             int[] array = { 1, 32, 4 };
 
-            Sort<int>.Quick(array, Sort<int>.Dec);
+            Sort<int>.Heap(array, Sort<int>.Acs);
             foreach (int i in array)
                 Console.Write(i + " ");
             Console.WriteLine();
