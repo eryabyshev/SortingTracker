@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace SortingTracker
 {
@@ -135,7 +136,48 @@ namespace SortingTracker
         }
 
 
-        public static void Heap (T[] array, Mode cmp)
+        public static void Radix(int[] array, Mode cmp)
+        {
+            _Radix(array, maxLenght(array), cmp);
+        }
+
+        private static int maxLenght(int[] array)
+        {
+            string temp = array.Max() + "";
+            return temp.Length;
+
+        }
+
+        private static void _Radix(int[] array, int lenghtOfElement, Mode cmp)
+        {
+            int range = 10;
+            ArrayList[] list = new ArrayList[range];
+            for (int i = 0; i < range; i++)
+                list[i] = new ArrayList();
+
+            for (int step = 0; step < lenghtOfElement; step++)
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    int temp = (array[i] % (int)Math.Pow(range, step + 1)) / (int)Math.Pow(range, step);
+                    list[temp].Add(array[i]);
+                }
+                int k = 0;
+                for (int i = 0; i < range; i++)
+                    for (int j = 0; j < list[i].Count; j++)
+                        array[k++] = (int)list[i][j];
+
+                for (int i = 0; i < range; i++)
+                    list[i].Clear();
+            }
+        }
+
+
+
+
+
+
+        public static void Heap(T[] array, Mode cmp)
         {
             for (Int32 i = array.Length / 2 - 1; i >= 0; --i)
             {
@@ -183,8 +225,6 @@ namespace SortingTracker
         }
 
 
-
-
         public static bool Acs(T x, T y)
         {
             return x.CompareTo(y) > 0;
@@ -205,9 +245,9 @@ namespace SortingTracker
         static void Main(string[] args)
         {
 
-            int[] array = { 1, 32, 4 };
+            int[] array = { 10, 15, 16, 78 };
 
-            Sort<int>.Heap(array, Sort<int>.Acs);
+            Sort<int>.Radix(array, Sort<int>.Dec);
             foreach (int i in array)
                 Console.Write(i + " ");
             Console.WriteLine();
